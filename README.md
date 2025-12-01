@@ -88,58 +88,77 @@ AdGuard 必须是付费版本，安装完成后，先不要打开，先授权
 
 如果没有生效，手动结束运行，重新打开 adguard chrome，经常改一些配置会出现奇奇怪怪问题，一般重新打开都能解决
 
-
 到此基本可以在 chrome 使用插件了
 
 现在 greasyfork 很多脚本不是为移动端设计的，就算是移动端，通过 adguard 安装，也不一定能用
 
 所以希望有更多人使用到 chrome 脚本，能有更多脚本适配 adguard
 
-然后在 greasyfork 找移动端 adguard 能用的脚本真的很痛苦
-
-比如我需要阻止知乎跳转，只能一个一个去试，这里的【知乎手机网页优化】能阻止知乎登录，算是勉强能用，但是功能没法选择
-
 这里推荐一些能用的，好用的 adguard 脚本，希望能帮到更多人
 
-| Syntax | Description |
+| 脚本 | 主要功能 |
 | --- | --- |
-| [知乎手机网页优化](https://greasyfork.org/scripts/389371) | 阻止应用跳转 |
-| [阻止跳转APP for 哔哩哔哩 (゜-゜)つロ 干杯~-bilibili](https://greasyfork.org/scripts/491579) | 阻止应用跳转 |
-
+| [知乎手机网页优化](https://greasyfork.org/scripts/389371) | 阻止网页自动跳转应用 |
+| [阻止跳转APP for 哔哩哔哩 (゜-゜)つロ 干杯~-bilibili](https://greasyfork.org/scripts/491579) | 阻止网页自动跳转应用 |
+| [自动展开](https://greasyfork.org/scripts/438656) | 自动展开文档隐藏部分 |
+| [骚扰拦截](https://greasyfork.org/scripts/440871) | 自动拦截或删除`下载弹窗`、`悬浮按钮`等元素 |
+| [聚合搜索引擎切换导航 + GitHub搜索结果增强(移动端优化)](https://greasyfork.org/scripts/513481) | 搜索引擎切换 |
+| [Bilibili - 优化未登录情况下的移动网页端](https://greasyfork.org/scripts/497732) | 播放视频，查看评论 |
 
 ---
 
 # adguard 过滤广告 + clash 代理
 
-这里坑还是很多的，这里教程使用 FlCash 0.8.91， adguar 4.14.15
+这里坑还是很多的，如果配置不好使用体验很差，这里教程使用 adguar 4.14.15，FlCash 0.8.91，其他版本不保证
 
-首先这个 FlCash，如果普通代理使用没问题，如果涉及一些高级功能，还是有些奇奇怪怪问题，想反馈，但看到它的 issues 数量，还是算了，不添麻烦了
+### flclash
 
-然后这个 adguard，普通过滤广告没问题，加代理，加插件，也是会有奇奇怪怪问题
+这里是全新安装后的默认配置，没有修改任何配置，配置不对容易出问题
 
-## 关于 adguard 过滤广告
+首先添加自己的订阅
 
-之前用的 gkd，各有各的好处吧。
+关闭通过VpnService自动路由系统所有流量【工具】->【进阶配置】->【网络】->【VPN】
 
-目前 adguard 可以过滤掉很多应用的开屏广告，但不会马上跳过开屏，也会停留一会，只是没有广告了
+开启覆盖配置中的DNS选项【工具】->【进阶配置】->【DNS】->【覆写DNS】
 
-也可以二者合并使用
+### 【重要】DNS 模式
 
-## 主要问题
+这里有两种方式配合 adguard 使用，FakeIp 和 RedirHost 模式，哪种方式使用正常体验好，就使用哪种
 
-如果出现应用打不开，上网慢，主要还是 DNS 的问题
+FakeIp 模式，对于需要代理应用来说，少一次 dns 解析请求，返回的都是假 ip，理论上会更快
 
-因为目前 clash 默认是 fake ip 模式，在 dns 解析时，返回给 adguard 是假 ip，有些应用会出现打不开
+- 在 FakeIp 模式下，需要在【Fakeip过滤】中添加 local.adguard.org 域名
 
-如果设置为 redir host 模式，体验差，因为首先要解析 dns 请求，adguard 转发 dns 请求到 clash，clash 在根据规则去决定本地解析还是远程解析 dns，解析完成返回adguard，adguard在返回chrome，再进行tcp连接
+RedirHost 模式，对于需要代理应用来说，多一次 dns 解析请求，返回的都是真 ip，使用中问题少些
 
-还有redir host是都是ip请求，也就是clash域名分流规则无法使用，clash meta 需要开启 sniffer, 从ip中提取域名，再根据域名分流
+- 【遵守规则】DNS连接跟随rules,需配置proxy-server-nameserver，开启此选项
 
-最好还是fake ip 模式，当前 flclash 的rule set 有些问题，如果使用 fake ip，一些本地的域名，比如 local.adguard.org ，会进行代理，就会出现chrome插件失效问题
+- 【DNS模式】选择 redirHost
 
-因为 local.adguard.org 是一个chrome 脚本的加载地址，不能被代理，需要返回真实ip
+- 开启 sniffer
 
-adguard 设置应用分流规则，但是应用流量不设置代理，dns 解析也是会走clash代理服务解析，由于clash 是fake ip,也会出问题
+- 【工具】->【进阶配置】->【脚本】->【添加】[sniffer 脚本](https://raw.githubusercontent.com/AndyYuenOk/mobile-chrome-extensions/refs/heads/main/sniffer.js)
 
-https 请求 -> adguard vpn -> adguard 分流 -> clash 代理
-  
+- 覆写订阅配置
+
+- 【配置】->【订阅菜单】->【更多】->【覆写】->【脚本】，选择刚才添加的脚本
+
+推荐使用 RedirHost 模式
+
+最后在仪表盘开启代理服务
+
+### adguard
+
+关闭所有应用代理，【应用管理】->【暂停所有流量的路由】，只开启需要过滤广告的应用，如小红书、哔哩哔哩等，翻墙应用Play Store、Chrome等，避免其他应用使用出现问题。
+
+过滤广告的应用不设置代理，如小红书、哔哩哔哩等，建议关闭【通过代理路由应用程序】，这样应用不会走代理服务器，避免打不开问题
+
+设置代理服务器
+
+点击【设置】->【过滤】->【网络】->【代理】->【代理服务器】->【添加代理】
+
+代理类型 SOCKS5， 代理主机 127.0.0.1，代理端口 7890，开启【通过 SOCKS5 路由 UDP】，关闭【使用 FakeDNS】
+
+flclash RedirHost 模式下，过滤广告的应用可以关闭【通过 adguard 路由流量】选项，体验会好些
+
+## 如果出现应用打不开，上网慢，主要还是 DNS 的问题
