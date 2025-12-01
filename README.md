@@ -159,7 +159,9 @@ AdGuard https://liteapks.com/adguard-2.html
 
 推荐使用 RedirHost 模式
 
-### 在仪表盘开启代理服务
+### 开启代理服务
+
+要在仪表盘开启代理服务才可以，不要忘了开启服务
 
 # AdGuard
 
