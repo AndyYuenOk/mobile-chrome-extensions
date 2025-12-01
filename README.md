@@ -1,4 +1,4 @@
-# 移动端 Chrome 扩展
+# Chrome 移动端扩展
 
 通过 AdGuard 拦截 Chrome HTTPS 请求并注入 Tampermonkey 脚本
 
