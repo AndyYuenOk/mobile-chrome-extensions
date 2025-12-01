@@ -23,6 +23,8 @@ AdGuard 过滤广告 + FlClash 代理教程
 | [聚合搜索引擎切换导航 + GitHub搜索结果增强(移动端优化)](https://greasyfork.org/scripts/513481) | 搜索引擎切换 |
 | [Bilibili - 优化未登录情况下的移动网页端](https://greasyfork.org/scripts/497732) | 播放视频，查看评论 |
 
+---
+
 # 前言
 
 5202年了，移动 Chrome 还不支持扩展，是技术原因吗，肯定不是，是利益问题，真的好不爽
@@ -50,6 +52,8 @@ AdGuard 过滤广告 + FlClash 代理教程
 是的，移动端 edge firefox 都迎合用户的需求支持扩展了。Chome 不支持，因为是一家独大，无所谓的状态
 
 用 Chome 的主要原因是同步功能，这是其他浏览器做不到的
+
+---
 
 # Chome 脚本
 
